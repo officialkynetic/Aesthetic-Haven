@@ -1,22 +1,21 @@
 <pre>
 <?php
-session_start();
 require '../config/connection.php';
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    
+require '../models/User.php';
 
-    $statement = "SELECT * FROM users";
-    $query = $connection->query($statement);
-    // print_r($query);
-    if ($query->num_rows > 0) {
-        while ($rows = $query->fetch_assoc()) {
-            // print_r($rows);
-            if ($email == $rows["email"] && $password == $rows["password"]) {
-                return header("Location ../dashboard.php");
-            }
-        }
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    $email = mysqli_real_escape_string($connection, $_POST["email"]);
+    $password = mysqli_real_escape_string($connection, $_POST["password"]);
+    $hashedPassword = md5($password);
+
+    // var_dump($email, $password);
+
+    if(login($connection, $email, $hashedPassword) == true){
+        
+        return header("location:../dashboard.php");
+    } else {
+        echo "invalid email or password";
     }
+}
     
 ?>

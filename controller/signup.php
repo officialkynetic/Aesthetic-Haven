@@ -7,8 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST["name"];
     $email = $_POST["email"];
     $password = $_POST["password"];
+    $hashedPassword = md5($password);
 
-    $statement = "INSERT INTO users (name, email, password) VALUE ('$name', '$email', '$password')";
+    $statement = "INSERT INTO users (name, email, password) VALUE ('$name', '$email', '$hashedPassword')";
     
     
     if ($result = $connection->query($statement)) {
